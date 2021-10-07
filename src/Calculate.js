@@ -23,12 +23,12 @@ function calculateWinner (current) {
       ) {
         count = count + 1
       }
-      if (
+      /*if (
         newSquares[i][j] !== newSquares[i][j + 1] &&
         boardSize - (j + 1) > sizeLineToWin
       ) {
         count = 0;
-      }
+      }*/
 
       if (
         newSquares[i][j] !== newSquares[i][j + 1] &&
@@ -65,12 +65,12 @@ function calculateWinner (current) {
       ) {
         count = count + 1
       }
-      if (
+      /*if (
         newSquares[j][i] !== newSquares[j + 1][i] &&
         boardSize - (j + 1) > sizeLineToWin
       ) {
         count = 0;
-      }
+      }*/
       if (
         newSquares[j][i] !== newSquares[j + 1][i] &&
         boardSize - (j + 1) < sizeLineToWin

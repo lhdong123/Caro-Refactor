@@ -17,56 +17,6 @@ function Game() {
     const [isAscending, setIsAscending] = useState(true);
     const [selectValue, setSelectValue] = useState(defaultBoardSize);
 
-    function handleClick(i) {
-        const curHistory = history.slice(0, stepNumber + 1)
-        const current = curHistory[curHistory.length - 1]
-        const curSquares = current.squares.slice()
-        //console.log("hello")
-        const lineWin = calculateWinner(current).line
-        console.log(lineWin)
-        if (lineWin != null || curSquares[i] != null) {
-            return
-        }
-        curSquares[i] = xIsNext ? 'X' : 'O'
-
-        setHistory(curHistory.concat([
-            {
-                squares: curSquares,
-                boardSize: selectValue,
-                lastMove: i
-            }
-        ]));
-
-        setStepNumber(curHistory.length);
-        setXIsNext(!xIsNext);
-    }
-
-    function handleSort() {
-        setIsAscending(!isAscending);
-    }
-
-    function handleChange(e) {
-        //const boardSize = e.target.value;
-        //console.log(e.target.value);
-        const curBoardSize = parseInt(e.target.value)
-
-        setSelectValue(curBoardSize);
-        setHistory([
-            {
-                squares: Array(curBoardSize * curBoardSize).fill(null),
-                boardSize: curBoardSize
-            }
-        ]);
-        setStepNumber(0);
-        setXIsNext(true);
-        setIsAscending(true);
-
-    }
-
-    function jumpTo(step) {
-        setStepNumber(step);
-        setXIsNext(step % 2 === 0);
-    }
 
     const curHistory = history
     const current = curHistory[stepNumber]
@@ -92,7 +42,7 @@ function Game() {
                     className={
                         move === curStepNumber ? 'bold-currently-selected-item' : ''
                     }
-                    onClick={() => jumpTo(move)}
+                    onClick={() => jumpTo(move,setStepNumber,setXIsNext)}
                 >
                     {desc}
                 </button>
@@ -120,23 +70,26 @@ function Game() {
             <div className='game-board'>
                 <Board
                     squares={current.squares}
-                    onClick={i => handleClick(i)}
+                    onClick={i => handleClick(i,history,stepNumber,xIsNext,
+                        setHistory,selectValue,setStepNumber,setXIsNext)}
                     winLine={winInfo.line}
                     boardSize={selectValue}
                 />
             </div>
             <div className='game-info'>
                 <div>{status}</div>
-                <button onClick={() => handleSort()}>
+                <button onClick={() => handleSort(setIsAscending,isAscending)}>
                     {isAscending ? 'Descending' : 'Ascending'}
                 </button>
+                
                 <form>
                     <label htmlFor='new-todo'>BoardSize</label>
                     &nbsp;
                     <select
                         id='Board'
                         value={selectValue}
-                        onChange={e => handleChange(e)}
+                        onChange={e => handleChange(e,setSelectValue,setHistory,
+                            setStepNumber,setXIsNext,setIsAscending)}
                     >
                         <optgroup label='BoardSize'>
                             <option value='5'>5</option>
@@ -153,5 +106,55 @@ function Game() {
 
 }
 
+function handleChange(e,setSelectValue,setHistory,
+    setStepNumber,setXIsNext,setIsAscending) {
+    const curBoardSize = parseInt(e.target.value)
+
+    setSelectValue(curBoardSize);
+    setHistory([
+        {
+            squares: Array(curBoardSize * curBoardSize).fill(null),
+            boardSize: curBoardSize
+        }
+    ]);
+    setStepNumber(0);
+    setXIsNext(true);
+    setIsAscending(true);
+
+}
+
+function handleClick(i,history,stepNumber,xIsNext,
+    setHistory,selectValue,setStepNumber,setXIsNext) {
+    const curHistory = history.slice(0, stepNumber + 1)
+    const current = curHistory[curHistory.length - 1]
+    const curSquares = current.squares.slice()
+    //console.log("hello")
+    const lineWin = calculateWinner(current).line
+    console.log(lineWin)
+    if (lineWin != null || curSquares[i] != null) {
+        return
+    }
+    curSquares[i] = xIsNext ? 'X' : 'O'
+
+    setHistory(curHistory.concat([
+        {
+            squares: curSquares,
+            boardSize: selectValue,
+            lastMove: i
+        }
+    ]));
+
+    setStepNumber(curHistory.length);
+    setXIsNext(!xIsNext);
+}
+
+function handleSort(setIsAscending, isAscending) {
+    setIsAscending(!isAscending);
+}
+
+function jumpTo(step,setStepNumber,setXIsNext) {
+    setStepNumber(step);
+    setXIsNext(step % 2 === 0);
+}
 
 export default Game

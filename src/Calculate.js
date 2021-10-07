@@ -23,12 +23,18 @@ function calculateWinner (current) {
       ) {
         count = count + 1
       }
+      if (
+        newSquares[i][j] !== newSquares[i][j + 1] &&
+        boardSize - (j + 1) > sizeLineToWin
+      ) {
+        count = 0;
+      }
 
       if (
         newSquares[i][j] !== newSquares[i][j + 1] &&
         boardSize - (j + 1) < sizeLineToWin
       ) {
-        break
+        break;
       }
 
       //console.log("hallo")
@@ -59,12 +65,17 @@ function calculateWinner (current) {
       ) {
         count = count + 1
       }
-
+      if (
+        newSquares[j][i] !== newSquares[j + 1][i] &&
+        boardSize - (j + 1) > sizeLineToWin
+      ) {
+        count = 0;
+      }
       if (
         newSquares[j][i] !== newSquares[j + 1][i] &&
         boardSize - (j + 1) < sizeLineToWin
       ) {
-        break
+        break;
       }
       if (count === sizeLineToWin - 1) {
         for (let x = j + 1; x > j + 1 - sizeLineToWin; x--) {
